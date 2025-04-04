@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: macos-11 
 
     steps:
       - name: Checkout repository
@@ -26,5 +26,5 @@ jobs:
         with:
           context: .  # Usa il contesto corrente (root del repository)
           push: true  # Spinge l'immagine su Docker Hub
-          tags: ${{ secrets.USERNAME }}/flask-app:dev
+          tags: ${{ secrets.USERNAME }}/flask-app:latest
           platform: linux/amd64,linux/arm64
