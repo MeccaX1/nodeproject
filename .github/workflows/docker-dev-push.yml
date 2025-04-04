@@ -1,0 +1,29 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Usa la versione corretta per fare il checkout del repository
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2  # Esegui il login su Docker Hub
+        with:
+          username: ${{ secrets.USERNAME }}  
+          password: ${{ secrets.KEY }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2  # Configura Docker Buildx per il build
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3  # Costruisce e fa il push dell'immagine
+        with:
+          context: .  # Usa il contesto corrente (root del repository)
+          push: true  # Spinge l'immagine su Docker Hub
+          tags: ${{ secrets.USERNAME }}/flask-app:dev
