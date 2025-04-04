@@ -26,4 +26,4 @@ jobs:
         with:
           context: .  # Usa il contesto corrente (root del repository)
           push: true  # Spinge l'immagine su Docker Hub
-          tags: ${{ secrets.USERNAME }}/nome-immagine:lates
+          tags: ${{ secrets.USERNAME }}/flask-app:latest
