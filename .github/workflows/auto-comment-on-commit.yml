@@ -39,7 +39,7 @@ jobs:
                         commit_sha: sha,  
                         body: body  
                     });
-                    catch (error) {
+                    }catch (error) {
                     core.setFailed(`Failed to create commit comment: ${error.message}`);
                     }
               env:
