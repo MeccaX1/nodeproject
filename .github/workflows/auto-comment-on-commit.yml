@@ -24,27 +24,23 @@ jobs:
                 cat diff.txt  
                 echo "::set-output name=diff::$(cat diff.txt)"
             
-            - name: Aggiungi un commento sul commit o PR
+            - name: Create commit comment
               uses: actions/github-script@v6
               with:
-                script: |
-                    const diff = 'diff --git a/App.py b/App.py';
-                    const commitMessage = 'Risoluzione';
-                    const sha = 'f8757be6a475d480f4114a6ea89077687116451d';
-                    const body = `### Dettagli del commit:\n\n**Messaggio del commit**: ${commitMessage}\n\n**Differenze principali**:\n\`\`\`diff\n${diff}\n\`\`\``;
-                    
-                    try {
-                    await github.rest.repos.createCommitComment({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        commit_sha: sha,
-                        body: body
-                    });
-                    } catch (error) {
-                    core.setFailed(`Failed to create commit comment: ${error.message}`);
-                    }
+                  script: |
+                      const body = "Test comment for commit.";
+                      try {
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: 1,  // Usa un numero di issue valido
+                          body: body
+                        });
+                      } catch (error) {
+                        core.setFailed(`Failed to create comment: ${error.message}`);
+                      }
               env:
-                GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
