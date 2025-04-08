@@ -1,8 +1,8 @@
 name: Commenta un issue 
     
 on:
-  issue_comment:
-    types: [created]
+  issues:
+    types: [opened]
 
 jobs:
     commento:
@@ -18,4 +18,3 @@ jobs:
                   Ciao @${{ github.actor }}! Grazie per il tuo commento. 
                   Ho ricevuto la tua richiesta e la esaminerò al più presto.
                   Se hai bisogno di ulteriore assistenza, non esitare a chiedere!
-                  
