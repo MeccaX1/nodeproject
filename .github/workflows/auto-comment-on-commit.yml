@@ -22,7 +22,9 @@ jobs:
               run: |
                 git diff --unified=5 HEAD~1 HEAD > diff.txt
                 cat diff.txt
-                echo "{\"diff\": \"$(cat diff.txt)\"}" > diff.json
+                # Escape i caratteri speciali (ad esempio, nuove righe, ritorni a capo) prima di salvarlo in JSON
+                ESCAPED_DIFF=$(cat diff.txt | jq -Rs .)
+                echo "{\"diff\": $ESCAPED_DIFF}" > diff.json
 
             - name: Crea commento sul commit
               uses: actions/github-script@v6
@@ -44,6 +46,7 @@ jobs:
                   }
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
 
