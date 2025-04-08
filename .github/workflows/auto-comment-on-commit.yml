@@ -1,0 +1,47 @@
+name: Commento su commit automatico
+
+on:
+    push:
+      branches:
+        - main
+  
+jobs:
+    comment-on-commit:
+        runs-on: ubuntu-latest
+        steps:
+
+            - name: checkout
+              uses: actions/checkout@v3
+
+            - name: Avvia git
+              run: |
+                git fetch --prune --unshallow
+
+            - name: Verifica differenza tra commit
+              id: diff
+              run: |
+                git diff --unifided=5 HEAD~1 HEAD > diff.txt  # Estrae le differenze tra il commit attuale e quello precedente
+                cat diff.txt  
+                echo "::set-output name=diff::$(cat diff.txt)"
+            
+            - name: Aggiungi un commento sul commit o PR
+              uses: actions/github-script@v6
+              with:
+                script: |
+                    const diff = ${{ steps.diff.outputs.diff}};
+                    const commitMessage = '${{ github.event.head_commit.message }}';
+                    const sha = '${{ github.sha }}';
+                    const body = `### Dettagli del commit:\n\n**Messaggio del commit**: ${commitMessage}\n\n**Differenze principali**:\n\`\`\`diff\n${diff}\n\`\`\``;
+
+                    await github.rest.repos.createCommitComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    commit_sha: sha,
+                    body: body
+                    });
+
+
+
+
+
+                    

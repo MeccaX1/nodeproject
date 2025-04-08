@@ -1,0 +1,21 @@
+name: Commenta un issue 
+    
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+    commento:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Commenta un issue
+              uses : peter-evans/create-or-update-comment@v2
+              with:
+                issue-number: ${{ github.event.issue.number }}
+                body: |
+                  **Titolo:** ${{ github.event.issue.title }}
+                  **Descrizione:** ${{ github.event.issue.body }}
+                  Ciao @${{ github.actor }}! Grazie per il tuo commento. 
+                  Ho ricevuto la tua richiesta e la esaminerò al più presto.
+                  Se hai bisogno di ulteriore assistenza, non esitare a chiedere!
+                  

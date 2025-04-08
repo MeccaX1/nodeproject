@@ -1,0 +1,16 @@
+name: Deploy immagine su server
+on:
+  workflow_dispatch:  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.IP }} << 'EOF'
+            docker pull ${{ secrets.USERNAME }}/flask-app:latest
+            docker stop flask-app || true
+            docker rm flask-app || true
+            docker run -d --name flask-app -p 5000:5000 ${{ secrets.USERNAME }}/flask-app:latest
+          EOF
