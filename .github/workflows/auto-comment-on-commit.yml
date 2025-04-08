@@ -43,7 +43,7 @@ jobs:
                     core.setFailed(`Failed to create commit comment: ${error.message}`);
                     }
               env:
-                  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
