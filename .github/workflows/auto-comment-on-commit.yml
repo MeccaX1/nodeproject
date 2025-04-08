@@ -33,7 +33,7 @@ jobs:
                         await github.rest.issues.createComment({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
-                          issue_number: 1,  // Usa un numero di issue valido
+                          issue_number: 1, 
                           body: body
                         });
                       } catch (error) {
