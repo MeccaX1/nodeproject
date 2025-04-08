@@ -4,13 +4,13 @@ on:
     push:
       branches:
         - main
-  
+
 jobs:
     comment-on-commit:
         runs-on: ubuntu-latest
         steps:
 
-            - name: checkout
+            - name: Checkout codice
               uses: actions/checkout@v3
 
             - name: Avvia git
@@ -20,31 +20,30 @@ jobs:
             - name: Verifica differenza tra commit
               id: diff
               run: |
-                git diff --unified=5 HEAD~1 HEAD > diff.txt 
-                cat diff.txt  
-                echo "::set-output name=diff::$(cat diff.txt)"
-            
-            - name: Create commit comment
+                git diff --unified=5 HEAD~1 HEAD > diff.txt
+                cat diff.txt
+                echo "{\"diff\": \"$(cat diff.txt)\"}" > diff.json
+
+            - name: Crea commento sul commit
               uses: actions/github-script@v6
               with:
-                  script: |
-                    const commitMessage = `${{ github.event.head_commit.message }}`;  
-                    const sha = `${{ github.sha }}`; 
-                    const diff = `${{ steps.diff.outputs.diff }}`; 
-                    const body = `### Dettagli del commit:\n\n**Messaggio del commit**: ${commitMessage}\n\n**Differenze principali**:\n\`\`\`diff\n${diff}\n\`\`\``;
-                    try {
+                script: |
+                  const commitMessage = `${{ github.event.head_commit.message }}`;  
+                  const sha = `${{ github.sha }}`; 
+                  const diff = require('./diff.json').diff; 
+                  const body = `### Dettagli del commit:\n\n**Messaggio del commit**: ${commitMessage}\n\n**Differenze principali**:\n\`\`\`diff\n${diff}\n\`\`\``;
+                  try {
                     await github.rest.repos.createCommitComment({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        commit_sha: sha,  
-                        body: body  
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      commit_sha: sha,  
+                      body: body  
                     });
-                    }catch (error) {
+                  } catch (error) {
                     core.setFailed(`Failed to create commit comment: ${error.message}`);
-                    }
+                  }
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
