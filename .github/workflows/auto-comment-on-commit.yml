@@ -32,12 +32,16 @@ jobs:
                     const commitMessage = '${{ github.event.head_commit.message }}';
                     const sha = '${{ github.sha }}';
                     const body = `### Dettagli del commit:\n\n**Messaggio del commit**: ${commitMessage}\n\n**Differenze principali**:\n\`\`\`diff\n${diff}\n\`\`\``;
-                    await github.rest.repos.createCommitComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    commit_sha: sha,
-                    body: body
-                    });
+                    try {
+                      await github.rest.repos.createCommitComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        commit_sha: sha,
+                        body: body
+                      });
+                    } catch (error) {
+                      core.setFailed(`Failed to create commit comment: ${error.message}`);
+                    }
               env:
                 GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
