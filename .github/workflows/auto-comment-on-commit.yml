@@ -20,7 +20,7 @@ jobs:
             - name: Verifica differenza tra commit
               id: diff
               run: |
-                git diff --unifided=5 HEAD~1 HEAD > diff.txt  # Estrae le differenze tra il commit attuale e quello precedente
+                git diff --unified=5 HEAD~1 HEAD > diff.txt  # Estrae le differenze tra il commit attuale e quello precedente
                 cat diff.txt  
                 echo "::set-output name=diff::$(cat diff.txt)"
             
