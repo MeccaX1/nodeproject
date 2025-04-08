@@ -38,6 +38,8 @@ jobs:
                     commit_sha: sha,
                     body: body
                     });
+              env:
+                GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
 
 
