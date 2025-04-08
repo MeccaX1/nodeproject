@@ -8,6 +8,8 @@ on:
 jobs:
     comment-on-commit:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
         steps:
 
             - name: Checkout codice
